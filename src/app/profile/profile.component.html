@@ -1,0 +1,37 @@
+<div class="container">
+  <div>
+    <h1 style="text-align: center; margin-top: 10px;"> Your Profile</h1>
+  </div>
+  <div class="row" style="margin-top: 50px;" >
+  <div class="col-lg-4">
+   <div>
+   <img src="{{userData.Image}}" style="height: 200px; width: 220px;">
+     <input type="file"
+     style="display:none;"
+     accept="image/*"
+     #fileUploder
+     (change)="showpreview($event)"
+     >
+
+      <br>
+     <br>
+      <button  type="button" class="btn btn-primary" label="Edit Photo" style="margin-right: 30px;" (click)="fileUploder.click()" >Edit Photo</button>
+      <button  type="button" class="btn btn-primary" label="Edit Profile" (click)="onEdit()">Edit Profile</button>
+    </div>
+</div>
+
+<div class="col-lg-8" >
+     <div style="margin-top: 10px;">
+
+    <P>I'm {{userData.FirstName}} {{userData.LastName}}
+      and I am above {{userData.Age}} years.
+     <p> you can send your emails to {{userData.Email}}.
+      I live in the state of {{userData.State}}.
+     <p> I like to {{userData.tags}} and reading books.</p>
+        <p *ngIf=userData.Subscribe>Please send me newsletters</p>
+       <p> Please reach out to me on my phone number {{userData.number}}</p>
+
+  </div>
+  </div>
+</div>
+
