@@ -13,7 +13,7 @@
               <label style="color :cornflowerblue;">upload your photo</label>
               <div *ngIf="submitted && f.Image.errors" class="invalid-feedback">
                <div *ngIf="f.Image.errors.required">Image is required</div>
-               </div
+              </div>
               <div [innerHtml]="msg" *ngIf="msg" style="color: red;"></div>
 
     </div>
@@ -26,23 +26,12 @@
            class="form-control"
             placeholder="First name"
              formControlName="FirstName"
-             pKeyFilter="alphanum"
-             pattern="[a-zA-Z]{2,15}$"
              [ngClass]="{ 'is-invalid': submitted && f.FirstName.errors }" >
              <div *ngIf="submitted && f.FirstName.errors" class="invalid-feedback">
               <div *ngIf="f.FirstName.errors.required">First Name is required</div>
               <div *ngIf="f.FirstName.errors.pattern">Please enter valid Name</div>
               <div *ngIf="f.FirstName.errors.maxlength">maximum 20 character allowed</div>
-
           </div>
-<!--
-             <span  class="help-block"
-             *ngIf="(!registration.get('FirstName').valid &&registration.get('FirstName').touched)">
-              <span *ngIf="registration.get('FirstName').errors['required']">This filed is required</span>
-              <span *ngIf="registration.get('FirstName').errors['pattern']">Please enter valid Name</span>
-              <span *ngIf="registration.get('FirstName').errors['maxlength']">maximum 20 character allowed</span>
-            </span> -->
-
           </div>
 
           <div class="col">
@@ -57,12 +46,6 @@
              <div *ngIf="f.LastName.errors.pattern">Please enter valid Name</div>
              <div *ngIf="f.LastName.errors.maxlength">maximum 20 character allowed</div>
              </div>
-            <!-- <span
-            *ngIf="!registration.get('LastName').valid && registration.get('LastName').touched"
-            class="help-block">
-            <span *ngIf="registration.get('LastName').errors['required']">This filed is required</span>
-            <span *ngIf="registration.get('LastName').errors['pattern']">Please enter valid Name</span>
-          </span> -->
         </div>
       </div>
       <br>
@@ -73,18 +56,11 @@
          formControlName="Email"
          placeholder="email"
          class="form-control"
-         [ngClass]="{ 'is-invalid': submitted && f.Email.errors }" >
-
+         [ngClass]="{ 'is-invalid': submitted && f.Email.errors } " >
          <div *ngIf="submitted && f.Email.errors" class="invalid-feedback">
           <div *ngIf="f.Email.errors.required">Last Name is required</div>
           <div *ngIf="f.Email.errors.email">Please enter valid Email</div>
           </div>
-         <!-- <span
-         *ngIf="!registration.get('Email').valid && registration.get('Email').touched"
-         class="help-block">
-         <span *ngIf="registration.get('Email').errors['required']">This filed is required</span>
-         <span *ngIf="registration.get('Email').errors['email']">Please enter valid Email Address</span>
-        </span> -->
       </div>
       <br>
       <div class="form-group">
@@ -93,21 +69,12 @@
         placeholder="1234-567-890"
         class="form-control"
         [ngClass]="{ 'is-invalid': submitted && f.Phone.errors }" >
-
         <div *ngIf="submitted && f.Phone.errors" class="invalid-feedback">
          <div *ngIf="f.Phone.errors.required">Last Name is required</div>
          <div *ngIf="f.Phone.errors.maxlength">Please enter 10 Digit Mobile Number</div>
          <div *ngIf="f.Phone.errors.minlength">Please enter valid mobile number</div>
 
          </div>
-        <!-- <span
-        *ngIf="!registration.get('Phone').valid && registration.get('Phone').touched"
-        class="help-block">
-        <span *ngIf="registration.get('Phone').errors['required']">This filed is required</span>
-        <span *ngIf="registration.get('Phone').errors['minlength']">Please enter 10 Digit Mobile Number</span>
-        <span *ngIf="registration.get('Phone').errors['maxlength']">Please enter valid Mobile Number</span>
-
-    </span> -->
       </div>
       <br>
       <div class="row">
@@ -120,12 +87,6 @@
           [options]="options"
         [ngClass]="{ 'is-invalid': submitted && f.Age.errors }">
         </ngx-slider>
-        <!-- <span
-        *ngIf="!registration.get('Age').valid && registration.get('Age').touched"
-        class="help-block">
-        <span *ngIf="registration.get('Age').errors['required']">This filed is required</span>
-         <span *ngIf="registration.get('Age').errors['min']">Age must be above 18 years</span>
-      </span>-->
       <div *ngIf="submitted && f.Age.errors" class="invalid-feedback">
         <div *ngIf="f.Age.errors.min">age must be above 19</div>
 
@@ -144,11 +105,6 @@
             {{c.name}}
            </option>
       </select>
-      <!-- <span
-      *ngIf="!registration.get('Country').valid && registration.get('Country').touched"
-      class="help-block">
-      <span *ngIf="registration.get('Country').errors['required']">Please Select Country</span>
-      </span> -->
       <div *ngIf="submitted && f.Country.errors" class="invalid-feedback">
         <div *ngIf="f.Country.errors.required">Please select Country</div>
     </div>
@@ -163,14 +119,8 @@
     <div *ngIf="submitted && f.Country.errors" class="invalid-feedback">
       <div *ngIf="f.Country.errors.required">Please select State</div>
   </div>
-    <!-- <span
-    *ngIf="!registration.get('State').valid && registration.get('State').touched"
-    class="help-block">
-    <span *ngIf="registration.get('State').errors['required']">Please select State</span>
-    </span> -->
       </div>
        <br>
-
        <div class="form-group ">
         <p-cascadeSelect
         [options]="Address"
@@ -179,18 +129,12 @@
         [optionGroupChildren]="['Add']"
         formControlName="address"
         placeholder="Select Address"
-        id="address"
-        [style]="{'minWidth': '18rem' }"
+        [style]="{'minWidth': '14rem' }"
         [ngClass]="{ 'is-invalid': submitted && f.address.errors }">
       </p-cascadeSelect>
       <div *ngIf="submitted && f.address.errors" class="invalid-feedback">
         <div *ngIf="f.address.errors.required">Please select Address</div>
     </div>
-      <!-- <span
-      *ngIf="!registration.get('address').valid && registration.get('address').touched"
-      class="help-block">
-      <span *ngIf="registration.get('address').errors['required']">Please select Address</span>
-      </span> -->
     </div>
     <br>
     <div class="form-group">
@@ -205,15 +149,8 @@
       <div *ngIf="f.tags.errors.pattern">Please Enter valid data</div>
 
   </div>
-    <!-- <span
-    *ngIf="!registration.get('tags').valid && registration.get('tags').touched"
-    class="help-block">
-    <span *ngIf="registration.get('tags').errors['required']">Please Enter your hobbies</span>
-
-    </span> -->
     </div>
     <br>
-
 
       <div class="form-group form-check">
         <input class="form-check-input"
@@ -224,19 +161,11 @@
           Subscribe for newsletter
         </label>
         </div>
-
-
-
         <div class="d-flex justify-content-end align-items-end mt-2">
-
         <button pButton type="submit"
-        label="Save"
-        >
+        label="Save">
        </button>
-
         </div>
-
       </div>
-
 </div>
 </form>
