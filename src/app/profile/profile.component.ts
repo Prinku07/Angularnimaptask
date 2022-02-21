@@ -39,21 +39,16 @@ constructor(private route:ActivatedRoute,
 getUserData(){
   this.http.get("http://localhost:3000/posts/"+ this.userid ).subscribe(res=> {
     this.userData = res;
-
-    this.dom.bypassSecurityTrustResourceUrl(this.userData.Image)
- console.log(this.userData.Image);
+   this.dom.bypassSecurityTrustResourceUrl(this.userData.Image)
+    console.log(this.userData.Image);
     this.ImageBaseString = this.userData.Image;
-
-   // console.log(this.ImageBaseString)
   })
 }
 
 onEdit() {
 const ref = this.dialogService.open(RegisterComponent, {
   header: 'Update',
-  width: '60%',
   data : this.userData,
-  contentStyle : {}
 });
 ref.onClose.subscribe(()=> {
   this.getUserData();
@@ -77,11 +72,15 @@ showpreview(event : any) {
         this.ImageBaseString = reader.result;
       }
 
+
+
 }
 else {
  this.imgSrc = this.userData.Image;
 
 }
+}
+
 }
 
 // localStorage.setItem("isProfilePage","true");
@@ -90,4 +89,3 @@ else {
 
 
 
-}

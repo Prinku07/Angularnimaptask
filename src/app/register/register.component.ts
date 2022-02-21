@@ -20,11 +20,11 @@ export class RegisterComponent implements OnInit {
     public fb : FormBuilder,
     public http : HttpClient,
     public route : Router,
-    private dom : DomSanitizer,
+
     public ref: DynamicDialogRef,
     public  config : DynamicDialogConfig,
     public routers: ActivatedRoute,
-    private router: Router
+
     ) { }
   registration : any;
 
@@ -35,16 +35,16 @@ export class RegisterComponent implements OnInit {
 
      this.registration = this.fb.group({
        Image:['',Validators.required],
-       FirstName:['',[Validators.required,Validators.pattern('^[a-zA-Z]{2,15}$')]],
-       LastName:['',[Validators.required, Validators.pattern('^[a-zA-Z]{2,15}$')]],
+       FirstName:['',[Validators.required,Validators.pattern('[a-zA-Z]{2,15}$'), Validators.maxLength(20)]],
+       LastName:['',[Validators.required, Validators.pattern('[a-zA-Z]{2,15}$')]],
        Email:['',[Validators.required, Validators.email]],
        Phone:['',[Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
-       Age:['',Validators.required],
-       State:['',Validators.required],
+       Age:['',[Validators.required,Validators.min(20)]],
        Country:['',Validators.required],
-       tags:['',Validators.required],
+       State:['',Validators.required],
        address:['',Validators.required],
-       Subscribe:['',Validators.required]
+       tags:[['cricket', 'Football'],Validators.required ],
+       Subscribe:[['true'],Validators.required]
      })
     if(this.config && this.config.data) {
       this.state = this.select.state()
@@ -58,23 +58,23 @@ export class RegisterComponent implements OnInit {
    imgSrc : any="/assets/Placeholder.png";
    selectedImage : any;
    ImageBaseString:any;
+   msg : any
 
    options: Options = {
-     floor: 0,
-     ceil: 50
+     floor: 18,
+     ceil: 60
    };
-   displayStyle = "none";
-
 
    Contries: any= [];
    state: any = [];
 
-   selectedAddress: any;
 
    Address : any = [
      {  name: 'Home',  Add: [ {cname: 'Address1'},{cname: 'Address2'}  ] },
      { name: 'Company', Add: [{cname: 'Company Address1'}, {cname: 'Company Address2'}]  }
    ];
+
+
 
 
    onSelect(Contries : any){
@@ -84,31 +84,96 @@ export class RegisterComponent implements OnInit {
        e.id == Contries.target.value);
      }
 
-   showPreview(event : any) {
+
+  showPreview(event : any) {
+
      if(event.target.files && event.target.files[0])
      {
-       // File Preview
+
+       const mimeType = event.target.files[0].type;
+       if(mimeType.match(/image\/*/) == null) {
+       this.msg = "Only images are supported";
+       return;
+      }
+
+      if(event.target.files[0].size < 350 * 325 && event.target.files[0].size < 2000000){
+        this.msg= "350*325px image requride";
+        return;
+      }
+
        const reader = new FileReader();
+       // File Preview
        reader.onload = (e : any) =>
        this.imgSrc = e.target.result;
+       this.msg = "file uploaded succesfully";
        reader.readAsDataURL(event.target.files[0]);
        this.selectedImage = event.target.files[0];
 
        reader.onloadend = ()=>{
          this.ImageBaseString = reader.result;
-
+         return;
        }
 
-     }
+    }
      else {
        this.imgSrc = '/assets/Placeholder.png';
        this.selectedImage = null;
      }
    }
 
+//   showPreview(event : any){
+//     if(event.target.files &&  event.target.files[0])
+//      {
+//       const mimeType = event.target.files[0].type;
+//       if(mimeType.match(/image\/*/) == null) {
+//         this.msg = "Only images are supported";
+//         return;
+//       }
 
+//       if(event.target.files[0].size < 350 * 325 ) {
+//         this.msg = "350*325px image requride";
+//         return;
+//       }
+
+//       const reader = new FileReader();
+//       reader.readAsDataURL(event.target.files[0]);
+
+//       reader.onload = (_event) => {
+//         this.msg = "file uploaded succesfully";
+//         this.imgSrc = reader.result;
+//         this.selectedImage = event.target.files[0];
+//       }
+//       reader.onloadend = ()=>{
+//         this.ImageBaseString = reader.result;
+
+//   }
+// }
+
+//   else {
+//         this.imgSrc = '/assets/Placeholder.png';
+//          this.selectedImage = null;
+//        }
+//   }
+
+// showPreview(event: any) {
+//   if (event.target.files && event.target.files[0]) {
+//     {
+//   if (event.target.files[0].size < 200 * 200)
+//    {/* Checking height * width*/ }
+//     if (event.target.files[0].size < 2000000) {/* checking size here - 2MB */ }
+// }
+// }}
+
+get f() { return this.registration.controls; }
+
+submitted = false;
     Save(){
-
+      this.submitted= true;
+      if (this.registration.invalid) {
+       // alert("form is invalid");
+        return;
+    }
+    else{
           this.registration.value.Image= this.ImageBaseString
           const payload = this.registration.value;
            //  console.log(payload);
@@ -126,11 +191,12 @@ export class RegisterComponent implements OnInit {
                console.log(res)
                let data : any = res;
                this.route.navigate(['/profile'],{queryParams:{id: data.id}})
-               this.ref.close();
+               this.ref.close(payload);
         })
 
       }
       }
+    }
 
 
 

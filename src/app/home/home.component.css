@@ -4,3 +4,8 @@ input.ng-invalid.ng-touched {
 .help-block {
   color: red;
 }
+.w-100 {
+  width: 100% !important;
+  height: 75vh;
+}
+
