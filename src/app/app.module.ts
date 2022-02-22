@@ -28,6 +28,7 @@ import {InputTextModule} from 'primeng/inputtext';
     RegisterComponent,
 
 
+
   ],
   imports: [
     BrowserModule,

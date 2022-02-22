@@ -3,10 +3,8 @@ import { Validators,FormBuilder } from '@angular/forms';
 import { DropdownService } from '../dropdown.service';
 import { Options } from '@angular-slider/ngx-slider';
 import { HttpClient } from '@angular/common/http';
-import {  ActivatedRoute, Router } from '@angular/router';
-import { DynamicDialogRef , DynamicDialogConfig } from 'primeng/dynamicdialog';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ProfileComponent } from '../profile/profile.component';
+import { Router } from '@angular/router';
+import { DynamicDialogRef , DynamicDialogConfig } from 'primeng/dynamicdialog'
 
 
 @Component({
@@ -15,7 +13,11 @@ import { ProfileComponent } from '../profile/profile.component';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  @ViewChild(ProfileComponent) sub? :ProfileComponent;
+  error: string | any;
+  imagePreview: string | ArrayBuffer | null | any;
+  employee: any;
+  imgURL: string | ArrayBuffer | null | any;
+
   constructor(public select : DropdownService,
     public fb : FormBuilder,
     public http : HttpClient,
@@ -23,7 +25,6 @@ export class RegisterComponent implements OnInit {
 
     public ref: DynamicDialogRef,
     public  config : DynamicDialogConfig,
-    public routers: ActivatedRoute,
 
     ) { }
   registration : any;
@@ -43,22 +44,24 @@ export class RegisterComponent implements OnInit {
        Country:['',Validators.required],
        State:['',Validators.required],
        address:['',Validators.required],
-       tags:[['cricket', 'Football'],Validators.required ],
+       tags:[['cricket', 'Football'],Validators.required],
        Subscribe:[['true'],Validators.required]
      })
     if(this.config && this.config.data) {
+      this.imgSrc = this.config.data?.Image;
       this.state = this.select.state()
       .filter(e =>
         e.id == this.config.data.Country);
         this.registration.reset(this.config.data);
     }
-
    }
 
    imgSrc : any="/assets/Placeholder.png";
    selectedImage : any;
    ImageBaseString:any;
-   msg : any
+   msg : string | any;
+   width?:number;
+   height?:number;
 
    options: Options = {
      floor: 18,
@@ -74,9 +77,6 @@ export class RegisterComponent implements OnInit {
      { name: 'Company', Add: [{cname: 'Company Address1'}, {cname: 'Company Address2'}]  }
    ];
 
-
-
-
    onSelect(Contries : any){
 
    this.state = this.select.state()
@@ -84,85 +84,95 @@ export class RegisterComponent implements OnInit {
        e.id == Contries.target.value);
      }
 
+  // showPreview(event : any) {
 
-  showPreview(event : any) {
+  //    if(event.target.files && event.target.files[0])
+  //    {
+  //      const mimeType = event.target.files[0].type;
+  //      if(mimeType.match(/image\/*/) == null) {
+  //      this.msg = "Only images are supported";
+  //      return;
+  //     }
 
-     if(event.target.files && event.target.files[0])
-     {
+  //     if(event.target.files[0].height < 350 * 325 && event.target.files[0].size < 2000000){
+  //       this.msg= "350*325px image requride";
+  //       return;
+  //     }
 
-       const mimeType = event.target.files[0].type;
-       if(mimeType.match(/image\/*/) == null) {
-       this.msg = "Only images are supported";
-       return;
+  //      const reader = new FileReader();
+  //      // File Preview
+  //      reader.onload = (e : any) =>
+  //      this.imgSrc = e.target.result;
+  //      this.msg = "file uploaded succesfully";
+  //      reader.readAsDataURL(event.target.files[0]);
+  //      this.selectedImage = event.target.files[0];
+
+  //      reader.onloadend = ()=>{
+  //        this.ImageBaseString = reader.result;
+  //        return;
+  //      }
+
+  //   }
+  //    else {
+  //      this.imgSrc = '/assets/Placeholder.png';
+  //      this.selectedImage = null;
+  //    }
+  //  }
+  // showPreview(event: any) {
+  //   let reader = new FileReader();
+  //   if (event.target.files && event.target.files.length > 0) {
+  //     let file = event.target.files[0];
+
+  //     let img = new Image();
+
+  //     img.src = window.URL.createObjectURL( file );
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => {
+
+  //         const width = img.naturalWidth;
+  //         const height = img.naturalHeight;
+
+  //         window.URL.revokeObjectURL( img.src );
+  //         console.log(width + '*' + height);
+  //         if ( width !== 350 && height !== 325 ) {
+  //           alert('photo should be 350 x 325 size');
+  //           this.registration.reset();
+  //         } else {
+  //           this.imgSrc = reader.result;
+  //         }
+  //         };
+  //       }
+  //     }
+
+      showPreview(event : any){
+        if(event.target.files &&  event.target.files[0])
+         {
+          const mimeType = event.target.files[0].type;
+          if(mimeType.match(/image\/*/) == null) {
+            this.msg = "Only images are supported";
+            return;
+          }
+          // if(event.target.files[0].size < 310 * 325 ) {
+          //   this.msg = "only 350*325px image can be uploaded";
+          //   return;
+          // }
+
+          // Upload a photo (size restriction - 310x325 px)
+          const reader = new FileReader();
+          reader.readAsDataURL(event.target.files[0]);
+
+          reader.onload = (_event) => {
+
+            this.msg = "";
+
+            this.imgSrc = reader.result;
+          }
+          reader.onloadend = ()=>{
+            this.ImageBaseString = reader.result;
+
       }
-
-      if(event.target.files[0].size < 350 * 325 && event.target.files[0].size < 2000000){
-        this.msg= "350*325px image requride";
-        return;
       }
-
-       const reader = new FileReader();
-       // File Preview
-       reader.onload = (e : any) =>
-       this.imgSrc = e.target.result;
-       this.msg = "file uploaded succesfully";
-       reader.readAsDataURL(event.target.files[0]);
-       this.selectedImage = event.target.files[0];
-
-       reader.onloadend = ()=>{
-         this.ImageBaseString = reader.result;
-         return;
-       }
-
-    }
-     else {
-       this.imgSrc = '/assets/Placeholder.png';
-       this.selectedImage = null;
-     }
-   }
-
-//   showPreview(event : any){
-//     if(event.target.files &&  event.target.files[0])
-//      {
-//       const mimeType = event.target.files[0].type;
-//       if(mimeType.match(/image\/*/) == null) {
-//         this.msg = "Only images are supported";
-//         return;
-//       }
-
-//       if(event.target.files[0].size < 350 * 325 ) {
-//         this.msg = "350*325px image requride";
-//         return;
-//       }
-
-//       const reader = new FileReader();
-//       reader.readAsDataURL(event.target.files[0]);
-
-//       reader.onload = (_event) => {
-//         this.msg = "file uploaded succesfully";
-//         this.imgSrc = reader.result;
-//         this.selectedImage = event.target.files[0];
-//       }
-//       reader.onloadend = ()=>{
-//         this.ImageBaseString = reader.result;
-
-//   }
-// }
-
-//   else {
-//         this.imgSrc = '/assets/Placeholder.png';
-//          this.selectedImage = null;
-//        }
-//   }
-
-// showPreview(event: any) {
-//   if (event.target.files && event.target.files[0]) {
-//     {
-//   if (event.target.files[0].size < 200 * 200)
-//    {/* Checking height * width*/ }
-//     if (event.target.files[0].size < 2000000) {/* checking size here - 2MB */ }
-// }
-// }}
+      }
 
 get f() { return this.registration.controls; }
 
@@ -170,7 +180,6 @@ submitted = false;
     Save(){
       this.submitted= true;
       if (this.registration.invalid) {
-       // alert("form is invalid");
         return;
     }
     else{
@@ -197,49 +206,5 @@ submitted = false;
       }
       }
     }
-
-
-
-    // Save() {
-    //   this.registration.value.Image = this.ImageBaseString
-    //   console.log(this.ImageBaseString.value)
-    //   const payload = this.registration.value;
-    //   console.log(this.registration.value)
-
-    //   let page:any = localStorage.getItem("isProfilePage")
-    //   if(page == "true")
-    //   {
-    //     let profile:any = localStorage.getItem("profile");
-    //    let parseData = JSON.parse(profile);
-
-    //     this.http.put("http://localhost:3000/posts/"+parseData.id,payload).subscribe(res=>{
-    //       console.log(res);
-    //       localStorage.setItem('profile', JSON.stringify(res));
-    //     })
-    //     console.log("comme from profile")
-    //     this.router.navigate(['profile']);
-
-    //     this.ref.close();
-
-    //   }
-    //   else
-    //   {
-    //     this.http.post("http://localhost:3000/posts",payload).subscribe(res=>{
-    //       console.log(res)
-    //       localStorage.setItem('profile', JSON.stringify(res));
-
-    //     this.router.navigate(['profile']);
-    //     this.ref.close();
-    //     })
-    //   }}
-
-      // Save() {
-      //   const payload = this.registration.value;
-      //   localStorage.setItem('profile', JSON.stringify( payload));
-      //   this.router.navigate(['profile']);
-      //   this.ref.close();
-      // }
-
-
     }
 

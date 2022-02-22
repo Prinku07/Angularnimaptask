@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col-md-4 ml-auto">
 
-        <img [src]="imgSrc" *ngIf ="imgSrc "height="150" width="140" (click)="fileUploader.click()">
+      <img [src]="imgSrc" *ngIf ="imgSrc "height="150" width="140" (click)="fileUploader.click()">
       <input type="file"
               style="display: none;"
               #fileUploader
@@ -17,7 +17,6 @@
               <div [innerHtml]="msg" *ngIf="msg" style="color: red;"></div>
 
     </div>
-
 
     <div class="col-md-8 ml-auto">
       <div class="row" >
@@ -136,6 +135,7 @@
         <div *ngIf="f.address.errors.required">Please select Address</div>
     </div>
     </div>
+
     <br>
     <div class="form-group">
     <p-chips
@@ -168,4 +168,5 @@
         </div>
       </div>
 </div>
+
 </form>

@@ -70,17 +70,16 @@ showpreview(event : any) {
 
       reader.onloadend = ()=>{
         this.ImageBaseString = reader.result;
+        this.http.put("http://localhost:3000/posts/" + this.userData.id, {...this.userData , Image : this.ImageBaseString}).subscribe(res=>{
+
+        })
       }
-
-
-
 }
 else {
  this.imgSrc = this.userData.Image;
 
 }
 }
-
 }
 
 // localStorage.setItem("isProfilePage","true");
