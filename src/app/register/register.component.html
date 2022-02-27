@@ -1,8 +1,8 @@
 <form [formGroup]="registration" (ngSubmit)="Save()">
-<div class="row">
+<div class="row" *ngIf="registration!=null" >
     <div class="col-md-4 ml-auto">
 
-      <img [src]="imgSrc" *ngIf ="imgSrc "height="150" width="140" (click)="fileUploader.click()">
+      <img [src]="imgSrc" height="150" width="140" (click)="fileUploader.click()">
       <input type="file"
               style="display: none;"
               #fileUploader
@@ -14,7 +14,6 @@
               <div *ngIf="submitted && f.Image.errors" class="invalid-feedback">
                <div *ngIf="f.Image.errors.required">Image is required</div>
               </div>
-              <div [innerHtml]="msg" *ngIf="msg" style="color: red;"></div>
 
     </div>
 

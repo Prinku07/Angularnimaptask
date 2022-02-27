@@ -13,20 +13,14 @@ import { DynamicDialogRef , DynamicDialogConfig } from 'primeng/dynamicdialog'
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  error: string | any;
-  imagePreview: string | ArrayBuffer | null | any;
-  employee: any;
-  imgURL: string | ArrayBuffer | null | any;
 
   constructor(public select : DropdownService,
     public fb : FormBuilder,
     public http : HttpClient,
     public route : Router,
-
     public ref: DynamicDialogRef,
-    public  config : DynamicDialogConfig,
+    public  config : DynamicDialogConfig, ) { }
 
-    ) { }
   registration : any;
 
   public  ngOnInit(): void {
@@ -48,6 +42,7 @@ export class RegisterComponent implements OnInit {
        Subscribe:[['true'],Validators.required]
      })
     if(this.config && this.config.data) {
+      console.log(this.registration.value)
       this.imgSrc = this.config.data?.Image;
       this.state = this.select.state()
       .filter(e =>
@@ -57,11 +52,7 @@ export class RegisterComponent implements OnInit {
    }
 
    imgSrc : any="/assets/Placeholder.png";
-   selectedImage : any;
    ImageBaseString:any;
-   msg : string | any;
-   width?:number;
-   height?:number;
 
    options: Options = {
      floor: 18,
@@ -84,93 +75,41 @@ export class RegisterComponent implements OnInit {
        e.id == Contries.target.value);
      }
 
-  // showPreview(event : any) {
 
-  //    if(event.target.files && event.target.files[0])
-  //    {
-  //      const mimeType = event.target.files[0].type;
-  //      if(mimeType.match(/image\/*/) == null) {
-  //      this.msg = "Only images are supported";
-  //      return;
-  //     }
-
-  //     if(event.target.files[0].height < 350 * 325 && event.target.files[0].size < 2000000){
-  //       this.msg= "350*325px image requride";
-  //       return;
-  //     }
-
-  //      const reader = new FileReader();
-  //      // File Preview
-  //      reader.onload = (e : any) =>
-  //      this.imgSrc = e.target.result;
-  //      this.msg = "file uploaded succesfully";
-  //      reader.readAsDataURL(event.target.files[0]);
-  //      this.selectedImage = event.target.files[0];
-
-  //      reader.onloadend = ()=>{
-  //        this.ImageBaseString = reader.result;
-  //        return;
-  //      }
-
-  //   }
-  //    else {
-  //      this.imgSrc = '/assets/Placeholder.png';
-  //      this.selectedImage = null;
-  //    }
-  //  }
-  // showPreview(event: any) {
-  //   let reader = new FileReader();
-  //   if (event.target.files && event.target.files.length > 0) {
-  //     let file = event.target.files[0];
-
-  //     let img = new Image();
-
-  //     img.src = window.URL.createObjectURL( file );
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => {
-
-  //         const width = img.naturalWidth;
-  //         const height = img.naturalHeight;
-
-  //         window.URL.revokeObjectURL( img.src );
-  //         console.log(width + '*' + height);
-  //         if ( width !== 350 && height !== 325 ) {
-  //           alert('photo should be 350 x 325 size');
-  //           this.registration.reset();
-  //         } else {
-  //           this.imgSrc = reader.result;
-  //         }
-  //         };
-  //       }
-  //     }
-
-      showPreview(event : any){
-        if(event.target.files &&  event.target.files[0])
-         {
+      showPreview(event: any){
+        if(event.target.files && event.target.files[0])
+        {
           const mimeType = event.target.files[0].type;
-          if(mimeType.match(/image\/*/) == null) {
-            this.msg = "Only images are supported";
+          if (mimeType.match(/image\/*/) == null) {
+            alert( "Only images are supported");
             return;
           }
-          // if(event.target.files[0].size < 310 * 325 ) {
-          //   this.msg = "only 350*325px image can be uploaded";
-          //   return;
-          // }
-
-          // Upload a photo (size restriction - 310x325 px)
           const reader = new FileReader();
           reader.readAsDataURL(event.target.files[0]);
 
           reader.onload = (_event) => {
-
-            this.msg = "";
-
             this.imgSrc = reader.result;
           }
           reader.onloadend = ()=>{
             this.ImageBaseString = reader.result;
-
       }
+      }
+      const Img = new Image();
+
+      const filesToUpload = (event.target.files);
+      Img.src = URL.createObjectURL(filesToUpload[0]);
+
+      Img.onload = (e:any)=>{
+        const height = e.path[0].height;
+        const width = e.path[0].width;
+
+        console.log(height, width);
+
+        if(width !== 310 || height !== 325 ){
+          alert("Image should be 310*325px");
+          this.imgSrc = "/assets/Placeholder.png";
+          this.ImageBaseString = ""
+        }
       }
       }
 
@@ -185,26 +124,29 @@ submitted = false;
     else{
           this.registration.value.Image= this.ImageBaseString
           const payload = this.registration.value;
-           //  console.log(payload);
+           // console.log(payload);
            if(this.config && this.config.data) {
-
-             this.http.put("http://localhost:3000/posts/"+ this.config.data.id, payload).subscribe(res=>{
-               console.log(res)
+             payload.Image = this.config.data?.Image
+             this.http.put("http://localhost:3000/posts/"+ this.config.data.id , payload).subscribe(res=>{
                let data : any = res;
+               this.ImageBaseString = res;
+              console.log(data)
+              console.log(this.ImageBaseString);
                this.route.navigate(['/profile'], {queryParams : {id :data.id }})
                this.ref.close();
              })
             }
             else{
              this.http.post("http://localhost:3000/posts",payload).subscribe(res=>{
-               console.log(res)
                let data : any = res;
+              console.log(data)
                this.route.navigate(['/profile'],{queryParams:{id: data.id}})
-               this.ref.close(payload);
-        })
+              this.ref.close();
+              })
+              }
 
       }
       }
     }
-    }
+
 

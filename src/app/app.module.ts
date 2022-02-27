@@ -19,6 +19,7 @@ import {ButtonModule} from 'primeng/button';
 import {InputTextModule} from 'primeng/inputtext';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,6 +27,7 @@ import {InputTextModule} from 'primeng/inputtext';
     ProfileComponent,
     HeaderComponent,
     RegisterComponent,
+
 
 
 

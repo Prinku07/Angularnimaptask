@@ -1,51 +1,20 @@
-<div class="container-fluid">
 
-  <nav class="navbar navbar-expand-md navbar-dark bg-primary" >
-    <a class="navbar-brand" href="#"><b>Demo App</b></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-end " id="navbarNavDropdown" >
-      <ul class="navbar-nav" style="font-size :large;">
-        <li class="nav-item active">
-          <a class="nav-link" aria-current="page"routerLinkActive="active" routerLink="/home" >Home </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" routerLink="/profile" [routerLinkActiveOptions]="{exact : true}">profile</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" routerLinkActive="active">Pricing</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown link
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
-        </li>
-      </ul>
-
-    </div>
-  </nav>
-  </div>
 <div class="container">
-
+  <div style="background-color :cornflowerblue;">
+<app-header></app-header>
+</div>
   <div>
     <h1 style="text-align: center; margin-top: 10px;"> Your Profile</h1>
   </div>
   <div class="row" style="margin-top: 50px;" >
   <div class="col-lg-4">
    <div>
-   <img src="{{userData.Image}}" style="height: 200px; width: 220px;">
+   <img src="{{ImageBaseString}}"   style="height: 200px; width: 220px;">
      <input type="file"
      style="display:none;"
      accept="image/*"
      #fileUploder
-     (change)="showpreview($event)"
-     >
+     (change)="showpreview($event)">
 
 
       <br>

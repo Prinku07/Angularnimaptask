@@ -39,8 +39,9 @@ constructor(private route:ActivatedRoute,
 getUserData(){
   this.http.get("http://localhost:3000/posts/"+ this.userid ).subscribe(res=> {
     this.userData = res;
+  //  console.log(this.userData)
    this.dom.bypassSecurityTrustResourceUrl(this.userData.Image)
-    console.log(this.userData.Image);
+    //console.log(this.userData.Image);
     this.ImageBaseString = this.userData.Image;
   })
 }
@@ -48,12 +49,13 @@ getUserData(){
 onEdit() {
 const ref = this.dialogService.open(RegisterComponent, {
   header: 'Update',
-  data : this.userData,
+  data :  this.userData
 });
 ref.onClose.subscribe(()=> {
   this.getUserData();
+
 })
-console.log(this.userData);
+//console.log(this.userData);
 
 }
 
@@ -62,6 +64,11 @@ imgSrc:any;
 showpreview(event : any) {
   if(event.target.files && event.target.files[0])
   {
+    const mimeType = event.target.files[0].type;
+    if (mimeType.match(/image\/*/) == null) {
+      alert( "Only images are supported");
+      return;
+    }
 // File Preview
  const reader = new FileReader();
   reader.onload = (e : any) =>
@@ -70,19 +77,35 @@ showpreview(event : any) {
 
       reader.onloadend = ()=>{
         this.ImageBaseString = reader.result;
+        console.log(this.ImageBaseString);
         this.http.put("http://localhost:3000/posts/" + this.userData.id, {...this.userData , Image : this.ImageBaseString}).subscribe(res=>{
-
         })
       }
-}
+    }
+
+const Img = new Image();
+
+const filesToUpload = (event.target.files);
+Img.src = URL.createObjectURL(filesToUpload[0]);
+
+Img.onload = (e:any)=>{
+  const height = e.path[0].height;
+  const width = e.path[0].width;
+
+  console.log(height, width);
+
+  if(width !== 310 || height !== 325 ){
+    alert("Image should be 310*325px");
+    this.imgSrc = "/assets/Placeholder.png";
+    this.ImageBaseString = this.userData.Image;
+  }
 else {
  this.imgSrc = this.userData.Image;
+}
+}
+}}
 
-}
-}
-}
 
-// localStorage.setItem("isProfilePage","true");
 
 
 
